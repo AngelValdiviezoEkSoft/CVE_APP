@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:info_cv_app/auth_service.dart';
 import 'package:info_cv_app/page_navigate.dart';
@@ -123,11 +125,11 @@ class LoginScreen extends StatelessWidget {
                 SizedBox(height: size.height * 0.07,),
           
                 TextField(
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                       obscureText: authService.varIsOscured,
                       //controller: passWordTxt,
                       decoration: InputDecoration(
-                        labelStyle: TextStyle(color: Colors.white),
+                        labelStyle: const TextStyle(color: Colors.white),
                         labelText: 'Contraseña',
                         suffixIcon: 
                         !authService.varIsOscured
@@ -136,7 +138,7 @@ class LoginScreen extends StatelessWidget {
                                 authService.varIsOscured =
                                     !authService.varIsOscured;
                               },
-                              icon: Icon(Icons.visibility,
+                              icon: const Icon(Icons.visibility,
                                   size: 24,
                                   color: Colors.white),
                             )
@@ -145,7 +147,7 @@ class LoginScreen extends StatelessWidget {
                                 authService.varIsOscured =
                                     !authService.varIsOscured;
                               },
-                              icon: Icon(
+                              icon: const Icon(
                                   size: 24,
                                   Icons.visibility_off,
                                   color: Colors.white),
@@ -253,7 +255,7 @@ class InfoScreen extends StatelessWidget {
                 onPressed: () {
                   Navigator.push(
                     context,
-                    MaterialPageRoute(builder: (context) => HouseCarouselScreen()),
+                    MaterialPageRoute(builder: (context) => HouseCarouselScreen(null)),
                   );
                 },
                 style: ElevatedButton.styleFrom(
@@ -362,6 +364,9 @@ class TerrenosScreen extends StatelessWidget {
 }
 
 class HouseCarouselScreen extends StatelessWidget {
+
+  HouseCarouselScreen(Key? key) : super(key: key);
+
   final List<String> houseImages = [
     'https://planner5d.com/blog/content/images/2023/05/dise-os-y-planos-de-casas-de-dos-pisos.jpg',
     'https://i.pinimg.com/550x/cf/ba/6d/cfba6d597fa88653ae0cf558278c02f5.jpg',
@@ -421,6 +426,10 @@ class HouseCarouselScreen extends StatelessWidget {
 
 class MenuScreen extends StatelessWidget {
 
+  static const platform = MethodChannel('call_channel');
+
+  static const platformEmail = MethodChannel('email_channel');
+
   final List<MenuOption> options = [
     MenuOption(icon: Icons.place, label: "Destinos", url: "https://centrodeviajesecuador.com/wp-content/uploads/2020/11/PLAN-GOLD1.jpg"),
     MenuOption(icon: Icons.home, label: "Membresías", url: 'https://centrodeviajesecuador.com/wp-content/uploads/2020/12/MENBRES%C3%8DA.jpg'),
@@ -429,6 +438,7 @@ class MenuScreen extends StatelessWidget {
     MenuOption(icon: Icons.archive_rounded, label: "Revista", url: 'https://centrodeviajesecuador.com/wp-content/uploads/2024/01/image-2-980x551.png'),
   ];
 
+/*
   void openDialer() async {
     final Uri dialerUri = Uri.parse("tel: +593979856428");
     if (await canLaunchUrl(dialerUri)) {
@@ -437,18 +447,25 @@ class MenuScreen extends StatelessWidget {
       //print("No se pudo abrir el teclado de llamadas.");
     }
   }
+  */
 
-  void openEmailApp(email) async {
-    final Uri emailUri = Uri(
-      scheme: 'mailto',
-      path: email, // Correo del destinatario
-      query: Uri.encodeFull("subject=Asunto&body=Escribe tu mensaje aquí"), // Opcional
-    );
+  void makePhoneCall() async {
+    
+    if(Platform.isAndroid){
+      try {
+        await platform.invokeMethod('makePhoneCall', {'phone': "+593979856428"});
+      } on PlatformException catch (_) {
+        //print("Error al hacer la llamada: ${e.message}");
+      }
+    }
+    
+  }
 
-    if (await canLaunchUrl(emailUri)) {
-      await launchUrl(emailUri);
-    } else {
-      //print("No se pudo abrir la aplicación de correo.");
+  void openEmailApp(email) async {    
+    try {
+      await platformEmail.invokeMethod('openEmailApp', {'email': email});
+    } on PlatformException catch (_) {
+      //print("Error al abrir la app de correos: ${e.message}");
     }
   }
 
@@ -458,6 +475,7 @@ class MenuScreen extends StatelessWidget {
     final size = MediaQuery.of(context).size;
 
     return Scaffold(
+      /*
       drawer: Drawer(
         backgroundColor: Colors.white,
         shadowColor: Colors.white,
@@ -498,9 +516,9 @@ class MenuScreen extends StatelessWidget {
           ],
         ),
       ),
+      */
       appBar: AppBar(
-        backgroundColor: const Color(0xFF53C9EC),
-        /*
+        backgroundColor: const Color(0xFF53C9EC),        
         leading: GestureDetector(
           onTap: () {
             
@@ -513,11 +531,11 @@ class MenuScreen extends StatelessWidget {
             ),
           ),
         ),
-        */
         actions: [
           InkWell(
             onTap: () async {
-              openDialer();
+              //openDialer();
+              makePhoneCall();
             },
             borderRadius: BorderRadius.circular(50),
             child: Container(
@@ -532,7 +550,8 @@ class MenuScreen extends StatelessWidget {
                 color: Colors.white,
                 tooltip: '(593-9) 79856428',
                 onPressed: () async {
-                  openDialer();
+                  //openDialer();
+                  makePhoneCall();
                 },
               ),
             ),
@@ -724,12 +743,12 @@ class MenuScreen extends StatelessWidget {
 
                           Container(
                             color: Colors.transparent,
-                            width: size.width * 0.95,
-                            height: size.height * 0.02,
+                            width: size.width * 0.97,
+                            height: size.height * 0.035,
                             alignment: Alignment.center,
                             child: DefaultTextStyle(
                               style: const TextStyle(
-                                fontSize: 20.0,
+                                fontSize: 18.0,
                                 fontFamily: 'Canterbury',
                               ),
                               child: AnimatedTextKit(
