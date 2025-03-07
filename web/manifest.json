@@ -1,6 +1,6 @@
 {
-    "name": "info_cv_app",
-    "short_name": "info_cv_app",
+    "name": "cve_app",
+    "short_name": "cve_app",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",

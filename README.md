@@ -1,4 +1,4 @@
-# info_cv_app
+# cve_app
 
 A new Flutter project.
 

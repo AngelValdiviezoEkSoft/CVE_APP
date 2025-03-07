@@ -90,12 +90,12 @@ BEGIN
         BLOCK "040904e4"
         BEGIN
             VALUE "CompanyName", "com.example" "\0"
-            VALUE "FileDescription", "info_cv_app" "\0"
+            VALUE "FileDescription", "cve_app" "\0"
             VALUE "FileVersion", VERSION_AS_STRING "\0"
-            VALUE "InternalName", "info_cv_app" "\0"
+            VALUE "InternalName", "cve_app" "\0"
             VALUE "LegalCopyright", "Copyright (C) 2025 com.example. All rights reserved." "\0"
-            VALUE "OriginalFilename", "info_cv_app.exe" "\0"
-            VALUE "ProductName", "info_cv_app" "\0"
+            VALUE "OriginalFilename", "cve_app.exe" "\0"
+            VALUE "ProductName", "cve_app" "\0"
             VALUE "ProductVersion", VERSION_AS_STRING "\0"
         END
     END
